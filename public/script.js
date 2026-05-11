@@ -192,6 +192,3 @@ function renderUpcomingEvents() {
         upcomingEventsDiv.appendChild(div);
     });
 }
-
-
-

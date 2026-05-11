@@ -62,15 +62,15 @@ body {
 /* CATEGORY DOTS */
 
 .vimportant {
-    background: #ff3b30; /* red */
+    background: #ff3b30;
 }
 
 .important {
-    background: #ffcc00; /* yellow */
+    background: #ffcc00;
 }
 
 .nimportant {
-    background: #34c759; /* green */
+    background: #34c759;
 }
 
 /* CALENDAR */
@@ -141,17 +141,17 @@ body {
 
 .event.vimportant {
     background: rgba(255, 59, 48, 0.25);
-    color: #ff6b63;
+    color: #FFFFFFF;
 }
 
 .event.important {
     background: rgba(255, 204, 0, 0.25);
-    color: #ffe066;
+    color: #FFFFFFF;
 }
 
 .event.nimportant {
     background: rgba(52, 199, 89, 0.25);
-    color: #7dff9e;
+    color: #FFFFFFF;
 }
 
 /* MODAL */
@@ -242,17 +242,17 @@ body {
     font-size: 12px;
 }
 
-.upcoming-category.work {
-    background: rgba(66,133,244,0.2);
-    color: #7fb0ff;
+.upcoming-category.vimportant {
+    background: rgba(255, 59, 48, 0.25);
+    color: #FFFFFFF;
 }
 
-.upcoming-category.study {
-    background: rgba(251,188,5,0.2);
-    color: #ffd86a;
+.upcoming-category.important {
+    background: rgba(255, 204, 0, 0.25)s;
+    color: #FFFFFF;
 }
 
-.upcoming-category.personal {
-    background: rgba(52,168,83,0.2);
-    color: #79df96;
+.upcoming-category.nimportant {
+    background:  rgba(52, 199, 89, 0.25);
+    color: #FFFFFF;
 }
