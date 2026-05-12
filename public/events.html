@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Events</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="events-page">
+
+    <div class="events-header">
+
+        <div>
+            <h1>All Events</h1>
+            <p>Your complete events list</p>
+        </div>
+
+        <a href="index.html" class="back-btn">
+            ← Back to Calendar
+        </a>
+
+    </div>
+
+    <div id="eventsList" class="events-list"></div>
+
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal" id="editModal">
+
+    <div class="modal-content">
+
+        <h2>Edit Event</h2>
+
+        <input type="text" id="editEventTitle" placeholder="Event title">
+
+        <input type="date" id="editEventDate">
+
+        <select id="editEventCategory">
+            <option value="vimportant">Very Important</option>
+            <option value="important">Important</option>
+            <option value="nimportant">Not Important</option>
+        </select>
+
+        <div class="modal-buttons">
+            <button onclick="saveEditedEvent()">Save</button>
+            <button onclick="closeEditModal()">Cancel</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- DELETE MODAL -->
+<div class="modal" id="deleteModal">
+
+    <div class="modal-content">
+
+        <h2>Delete Event</h2>
+
+        <p id="deleteText">Are you sure?</p>
+
+        <div class="modal-buttons">
+
+            <button onclick="deleteEvent()">Delete</button>
+            <button onclick="closeDeleteModal()">Cancel</button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+    const eventsList = document.getElementById("eventsList");
+    let events = [];
+    let eventToEditId = null;
+    let eventToDeleteId = null;
+
+    function escapeHtml(value) {
+        return String(value)
+            .replaceAll("&", "&amp;")
+            .replaceAll("<", "&lt;")
+            .replaceAll(">", "&gt;")
+            .replaceAll('"', "&quot;")
+            .replaceAll("'", "&#039;");
+    }
+
+    async function loadEvents() {
+
+        const response = await fetch("/events");
+
+        events = await response.json();
+
+        renderEvents(events);
+    }
+
+    function getCategoryLabel(cat) {
+
+        if (cat === "vimportant") return "Very Important";
+        if (cat === "important") return "Important";
+        if (cat === "nimportant") return "Not Important";
+
+        return cat;
+    }
+
+    function renderEvents(events) {
+
+        eventsList.innerHTML = "";
+
+        const sortedEvents = events.sort(
+            (a, b) => new Date(a.date) - new Date(b.date)
+        );
+
+        if (sortedEvents.length === 0) {
+
+            eventsList.innerHTML = `
+                <div class="empty-events">
+                    No events yet
+                </div>
+            `;
+
+            return;
+        }
+
+        sortedEvents.forEach(event => {
+
+            const formattedDate =
+                new Date(event.date).toLocaleDateString(
+                    "en-US",
+                    {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric"
+                    }
+                );
+
+            const eventCard = document.createElement("div");
+
+            eventCard.className = "event-card";
+
+            eventCard.innerHTML = `
+                <div class="event-card-top">
+
+                    <div>
+                        <div class="event-card-title">
+                            ${escapeHtml(event.title)}
+                        </div>
+
+                        <div class="event-card-date">
+                            ${formattedDate}
+                        </div>
+                    </div>
+
+                    <div class="event-badge ${event.category}">
+                        ${getCategoryLabel(event.category)}
+                    </div>
+
+                    <div class="event-card-actions">
+                        <button onclick="openEditModal('${event.id}')">Edit</button>
+                        <button onclick="openDeleteModal('${event.id}')">Delete</button>
+                    </div>
+
+                </div>
+            `;
+
+            eventsList.appendChild(eventCard);
+        });
+    }
+
+    function openEditModal(id) {
+
+        const event = events.find(item => item.id === id);
+
+        if (!event) return;
+
+        eventToEditId = id;
+
+        document.getElementById("editEventTitle").value = event.title;
+        document.getElementById("editEventDate").value = event.date;
+        document.getElementById("editEventCategory").value = event.category;
+
+        document.getElementById("editModal").style.display = "flex";
+    }
+
+    function closeEditModal() {
+
+        eventToEditId = null;
+        document.getElementById("editModal").style.display = "none";
+    }
+
+    async function saveEditedEvent() {
+
+        const title =
+            document.getElementById("editEventTitle").value;
+
+        const date =
+            document.getElementById("editEventDate").value;
+
+        const category =
+            document.getElementById("editEventCategory").value;
+
+        if (!title || !date) {
+            alert("Fill all fields");
+            return;
+        }
+
+        await fetch(`/events/${eventToEditId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                title,
+                date,
+                category
+            })
+        });
+
+        closeEditModal();
+        loadEvents();
+    }
+
+    function openDeleteModal(id) {
+
+        eventToDeleteId = id;
+
+        const event = events.find(item => item.id === id);
+
+        document.getElementById("deleteText").innerText =
+            `Delete "${event ? event.title : "this event"}"?`;
+
+        document.getElementById("deleteModal").style.display = "flex";
+    }
+
+    function closeDeleteModal() {
+
+        eventToDeleteId = null;
+        document.getElementById("deleteModal").style.display = "none";
+    }
+
+    async function deleteEvent() {
+
+        await fetch(`/events/${eventToDeleteId}`, {
+            method: "DELETE"
+        });
+
+        closeDeleteModal();
+        loadEvents();
+    }
+
+
+
+    loadEvents();
+
+</script>
+
+</body>
+</html>
