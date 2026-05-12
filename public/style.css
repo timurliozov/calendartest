@@ -152,25 +152,82 @@ body {
 .upcoming-actions,
 .event-card-actions {
     display: flex;
+    align-items: center;
     gap: 8px;
 }
 
 .event-actions button,
 .upcoming-actions button,
 .event-card-actions button {
-    background: #111315;
-    border: 1px solid #2d3136;
+    align-items: center;
+    background: #171a1f;
+    border: 1px solid #303741;
     border-radius: 8px;
-    color: white;
+    color: #d7dde5;
     cursor: pointer;
-    font-size: 12px;
-    padding: 4px 8px;
+    display: inline-flex;
+    height: 30px;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    width: 30px;
 }
 
 .event-actions button:hover,
 .upcoming-actions button:hover,
 .event-card-actions button:hover {
-    background: #2a2e33;
+    transform: translateY(-1px);
+}
+
+.event-actions button:focus-visible,
+.upcoming-actions button:focus-visible,
+.event-card-actions button:focus-visible {
+    outline: 2px solid #8ab4ff;
+    outline-offset: 2px;
+}
+
+.event-actions svg,
+.upcoming-actions svg,
+.event-card-actions svg {
+    fill: none;
+    height: 15px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 2;
+    width: 15px;
+}
+
+.event-actions .edit-action,
+.upcoming-actions .edit-action,
+.event-card-actions .edit-action {
+    background: rgba(47, 129, 247, 0.12);
+    border-color: rgba(88, 166, 255, 0.28);
+    color: #9ecbff;
+}
+
+.event-actions .edit-action:hover,
+.upcoming-actions .edit-action:hover,
+.event-card-actions .edit-action:hover {
+    background: rgba(47, 129, 247, 0.22);
+    border-color: rgba(88, 166, 255, 0.5);
+    color: #c7e2ff;
+}
+
+.event-actions .delete-action,
+.upcoming-actions .delete-action,
+.event-card-actions .delete-action {
+    background: rgba(255, 59, 48, 0.1);
+    border-color: rgba(255, 99, 91, 0.24);
+    color: #ff9a94;
+}
+
+.event-actions .delete-action:hover,
+.upcoming-actions .delete-action:hover,
+.event-card-actions .delete-action:hover {
+    background: rgba(255, 59, 48, 0.2);
+    border-color: rgba(255, 99, 91, 0.48);
+    color: #ffd3d0;
 }
 
 .event.vimportant {
@@ -233,6 +290,7 @@ body {
     border: none;
     border-radius: 10px;
     cursor: pointer;
+
 }
 
 

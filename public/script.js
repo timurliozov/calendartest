@@ -74,12 +74,21 @@ function renderCalendar() {
                    <span>${escapeHtml(event.title)}</span>
 
                    <span class="event-actions">
-                       <button onclick="openEditModal('${event.id}')">
-                           Edit
+                       <button class="icon-action-btn edit-action" type="button" aria-label="Edit event" title="Edit" onclick="openEditModal('${event.id}')">
+                           <svg viewBox="0 0 24 24" aria-hidden="true">
+                               <path d="M12 20h9"></path>
+                               <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                           </svg>
                        </button>
 
-                       <button onclick="openDeleteModal('${event.id}')">
-                           ×
+                       <button class="icon-action-btn delete-action" type="button" aria-label="Delete event" title="Delete" onclick="openDeleteModal('${event.id}')">
+                           <svg viewBox="0 0 24 24" aria-hidden="true">
+                               <path d="M3 6h18"></path>
+                               <path d="M8 6V4h8v2"></path>
+                               <path d="M19 6l-1 14H6L5 6"></path>
+                               <path d="M10 11v5"></path>
+                               <path d="M14 11v5"></path>
+                           </svg>
                        </button>
                    </span>
                </div>
@@ -291,8 +300,21 @@ function renderUpcomingEvents() {
             </div>
 
             <div class="upcoming-actions">
-                <button onclick="openEditModal('${event.id}')">Edit</button>
-                <button onclick="openDeleteModal('${event.id}')">Delete</button>
+                <button class="icon-action-btn edit-action" type="button" aria-label="Edit event" title="Edit" onclick="openEditModal('${event.id}')">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 20h9"></path>
+                        <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
+                    </svg>
+                </button>
+                <button class="icon-action-btn delete-action" type="button" aria-label="Delete event" title="Delete" onclick="openDeleteModal('${event.id}')">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M3 6h18"></path>
+                        <path d="M8 6V4h8v2"></path>
+                        <path d="M19 6l-1 14H6L5 6"></path>
+                        <path d="M10 11v5"></path>
+                        <path d="M14 11v5"></path>
+                    </svg>
+                </button>
             </div>
         `;
 
