@@ -1,9 +1,21 @@
 const calendar = document.getElementById("calendar");
 const monthYear = document.getElementById("monthYear");
 const upcomingEventsDiv = document.getElementById("upcomingEvents");
+document.getElementById("confirmDeleteBtn").onclick = deleteEvent;
 
 let currentDate = new Date();
 let events = [];
+let eventToDeleteId = null;
+let eventToEditId = null;
+
+function escapeHtml(value) {
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
 
 async function loadEvents() {
     const response = await fetch("/events");
@@ -56,13 +68,23 @@ function renderCalendar() {
 
         let eventsHTML = "";
 
-        dayEvents.forEach(event => {
-            eventsHTML += `
-                <div class="event ${event.category}">
-                    ${event.title}
-                </div>
-            `;
-        });
+       dayEvents.forEach(event => {
+           eventsHTML += `
+               <div class="event ${event.category}">
+                   <span>${escapeHtml(event.title)}</span>
+
+                   <span class="event-actions">
+                       <button onclick="openEditModal('${event.id}')">
+                           Edit
+                       </button>
+
+                       <button onclick="openDeleteModal('${event.id}')">
+                           ×
+                       </button>
+                   </span>
+               </div>
+           `;
+       });
 
         dayBox.innerHTML = `
             <div class="day-number">${day}</div>
@@ -126,6 +148,86 @@ async function addEvent() {
     loadEvents();
 }
 
+function openEditModal(id) {
+    const event = events.find(item => item.id === id);
+
+    if (!event) return;
+
+    eventToEditId = id;
+
+    document.getElementById("editEventTitle").value = event.title;
+    document.getElementById("editEventDate").value = event.date;
+    document.getElementById("editEventCategory").value = event.category;
+
+    document.getElementById("editModal").style.display = "flex";
+}
+
+function closeEditModal() {
+    eventToEditId = null;
+    document.getElementById("editModal").style.display = "none";
+}
+
+async function saveEditedEvent() {
+
+    const title =
+        document.getElementById("editEventTitle").value;
+
+    const date =
+        document.getElementById("editEventDate").value;
+
+    const category =
+        document.getElementById("editEventCategory").value;
+
+    if (!title || !date) {
+        alert("Fill all fields");
+        return;
+    }
+
+    await fetch(`/events/${eventToEditId}`, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            title,
+            date,
+            category
+        })
+    });
+
+    closeEditModal();
+    loadEvents();
+}
+
+function openDeleteModal(id) {
+    eventToDeleteId = id;
+
+    const event = events.find(item => item.id === id);
+
+    document.getElementById("deleteText").innerText =
+        `Delete "${event ? event.title : "this event"}"?`;
+
+    document.getElementById("deleteModal").style.display = "flex";
+}
+
+function closeDeleteModal() {
+    eventToDeleteId = null;
+    document.getElementById("deleteModal").style.display = "none";
+}
+
+async function deleteEvent() {
+
+    await fetch(`/events/${eventToDeleteId}`, {
+        method: "DELETE"
+    });
+
+    closeDeleteModal();
+    loadEvents();
+}
+
+
+
+
 loadEvents();
 
 
@@ -181,11 +283,16 @@ function renderUpcomingEvents() {
             </div>
 
             <div class="upcoming-title">
-                ${event.title}
+                ${escapeHtml(event.title)}
             </div>
 
             <div class="upcoming-category ${event.category}">
                 ${getCategoryLabel(event.category)}
+            </div>
+
+            <div class="upcoming-actions">
+                <button onclick="openEditModal('${event.id}')">Edit</button>
+                <button onclick="openDeleteModal('${event.id}')">Delete</button>
             </div>
         `;
 

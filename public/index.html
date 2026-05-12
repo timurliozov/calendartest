@@ -18,6 +18,10 @@
             + New Event
         </button>
 
+        <a href="events.html" class="all-events-btn">
+            All Events
+        </a>
+
         <div class="categories">
             <h3>Categories</h3>
 
@@ -95,6 +99,52 @@
         <div class="modal-buttons">
             <button onclick="addEvent()">Save</button>
             <button onclick="closeModal()">Cancel</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- EDIT MODAL -->
+<div class="modal" id="editModal">
+
+    <div class="modal-content">
+
+        <h2>Edit Event</h2>
+
+        <input type="text" id="editEventTitle" placeholder="Event title">
+
+        <input type="date" id="editEventDate">
+
+        <select id="editEventCategory">
+            <option value="vimportant">Very Important</option>
+            <option value="important">Important</option>
+            <option value="nimportant">Not Important</option>
+        </select>
+
+        <div class="modal-buttons">
+            <button onclick="saveEditedEvent()">Save</button>
+            <button onclick="closeEditModal()">Cancel</button>
+        </div>
+
+    </div>
+
+</div>
+
+<!-- DELETE MODAL -->
+<div class="modal" id="deleteModal">
+
+    <div class="modal-content">
+
+        <h2>Delete Event</h2>
+
+        <p id="deleteText">Are you sure?</p>
+
+        <div class="modal-buttons">
+
+            <button id="confirmDeleteBtn">Delete</button>
+            <button onclick="closeDeleteModal()">Cancel</button>
+
         </div>
 
     </div>
